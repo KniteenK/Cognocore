@@ -51,7 +51,7 @@ function App() {
 
   const completeAndDeleteTask = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/tasks/${id}`);
+      await axios.delete(`${apiUrl}/tasks/${id}`);
       setTasks(tasks.filter(task => task._id !== id));
     } catch (error) {
       console.error('Error completing and deleting task:', error);
