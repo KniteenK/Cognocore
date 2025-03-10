@@ -1,6 +1,8 @@
-// src/App.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -11,7 +13,7 @@ function App() {
   // Fetch tasks from the backend
   const fetchTasks = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/tasks');
+      const response = await axios.get(`${apiUrl}/tasks`);
       setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
@@ -28,7 +30,7 @@ function App() {
     if (!title.trim()) return;
     try {
       const newTask = { title, description, dueDate };
-      const response = await axios.post('http://localhost:5000/tasks', newTask, {
+      const response = await axios.post(`${apiUrl}/tasks`, newTask, {
         headers: { 'Content-Type': 'application/json' },
       });
       setTasks([...tasks, response.data]);
@@ -43,7 +45,7 @@ function App() {
   // Delete a task using axios.delete
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/tasks/${id}`);
+      await axios.delete(`${apiUrl}/tasks/${id}`);
       setTasks(tasks.filter(task => task._id !== id));
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -54,7 +56,7 @@ function App() {
   const toggleTaskCompletion = async (id, currentStatus) => {
     try {
       const updatedTask = { completed: !currentStatus };
-      const response = await axios.put(`http://localhost:5000/tasks/${id}`, updatedTask, {
+      const response = await axios.put(`${apiUrl}/tasks/${id}`, updatedTask, {
         headers: { 'Content-Type': 'application/json' },
       });
       setTasks(tasks.map(task => (task._id === id ? response.data : task)));
