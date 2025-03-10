@@ -10,7 +10,6 @@ function App() {
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
 
-  // Fetch tasks from the backend
   const fetchTasks = async () => {
     try {
       const response = await axios.get(`${apiUrl}/tasks`);
@@ -24,7 +23,6 @@ function App() {
     fetchTasks();
   }, []);
 
-  // Add a new task using axios.post
   const addTask = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
@@ -42,7 +40,6 @@ function App() {
     }
   };
 
-  // Delete a task using axios.delete
   const deleteTask = async (id) => {
     try {
       await axios.delete(`${apiUrl}/tasks/${id}`);
@@ -52,18 +49,15 @@ function App() {
     }
   };
 
-  // Toggle task completion status; assumes a PUT endpoint exists
-  const toggleTaskCompletion = async (id, currentStatus) => {
+  const completeAndDeleteTask = async (id) => {
     try {
-      const updatedTask = { completed: !currentStatus };
-      const response = await axios.put(`${apiUrl}/tasks/${id}`, updatedTask, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-      setTasks(tasks.map(task => (task._id === id ? response.data : task)));
+      await axios.delete(`http://localhost:5000/tasks/${id}`);
+      setTasks(tasks.filter(task => task._id !== id));
     } catch (error) {
-      console.error('Error updating task:', error);
+      console.error('Error completing and deleting task:', error);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
@@ -114,7 +108,7 @@ function App() {
                   </h2>
                   <div className="flex space-x-2">
                     <button
-                      onClick={() => toggleTaskCompletion(task._id, task.completed)}
+                      onClick={() => completeAndDeleteTask(task._id)}
                       className={`px-3 py-1 rounded text-sm transition-colors ${
                         task.completed
                           ? 'bg-yellow-500 text-white hover:bg-yellow-600'
