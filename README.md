@@ -45,7 +45,7 @@ Clone the repository and navigate to the project folder:
 git clone https://github.com/KniteenK/Cognocore
 ```
 To start the app
-Firstly, rename the .env.local file to .env in the Backend directory and then
+Firstly, rename the .env.example file to .env in the Backend directory and then
 
 ```bash
 cd .\Backend\
